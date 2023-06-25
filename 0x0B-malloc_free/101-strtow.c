@@ -25,7 +25,7 @@ char **strtow(char *str)
 			flag = 1;
 		if (i > 0 && str[i] == ' ' && str[i - 1] != ' ')
 		{
-			flag = 0;;
+			flag = 0;
 			len++;
 		}
 		i++;
@@ -35,7 +35,7 @@ char **strtow(char *str)
 	if (len == 0)
 		return (NULL);
 
-	words = (char **)malloc (sizeof(char *) * (len + 1));
+	words = (char **)malloc(sizeof(char *) * (len + 1));
 	if (words == NULL)
 		return (NULL);
 
