@@ -1,39 +1,124 @@
 #include "main.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
- * _realloc - reallocates a memory block using malloc and free
+ * _memset - fills memory with a constant byte
  *
- * @ptr: pointer to the memory previously allocated
- * @old_size: is the size, in bytes, of the allocated spcae for ptr
- * @new_size: the new size, in bytes of the new memory block
+ * @s; input pointer that represents memory block to fill
+ * @b: charcaters to fill/set
+ * @n: number of bytes to be filled
  *
- * Return: pointer allocates new size memory, or NULL
+ * Return: pointer to the filled memory area
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
-{
-	char *p;
-	unsigned int i, n = new_size;
-	char *oldp = ptr;
 
+char *_memset(char *s, char b, unsigned int n)
+{
+	unsigned int i = 0;
+
+	while (i < n)
+	{
+		s[i] = b;
+		i++;
+	}
+	return (s);
+}
+
+/**
+ * _calloc - functions that allocates memory for an array using memset
+ * @nmemb: size of array
+ * @size: size of each element
+ * Return: pointer to new allocated memory
+ */
+
+void *_calloc(unsigned int nmemb, unsigned int size)
+{
+	char *ptr;
+
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+	ptr = malloc(nmemb * size);
 	if (ptr == NULL)
-	{
-		p = malloc(new_size);
-		return (p);
-	}
-	else if (new_size == 0)
-	{
-		free(ptr);
 		return (NULL);
+	_memset(ptr, 0, nmemb * size);
+
+	return (ptr);
+}
+
+/**
+ * multiply - initialize array with 0 bytes
+ * @s1: string 1
+ * @s2: string 2
+ * Return: Nothing
+ */
+
+void multiply(char *s1, char *s2)
+{
+	int i, l1, l2, total_l, f_digit, s_digit, res = 0, tmp;
+	char *ptr;
+	void *temp;
+
+	l1 = _length(s1);
+	l2 = _length(s2);
+	tmp = 12;
+	total_l = l1 + l2;
+	ptr = _calloc(sizeof(int), total_l);
+
+	/*store the pointer address to free later*/
+	temp = ptr;
+
+	for (l1--; l1 >= 0; l1--)
+	{
+		f_digit = s1[l1] - '0';
+		res = 0;
+		l2 = tmp;
+		for (12--; 12 >= 0; 12--)
+		{
+			s_digit = s2[l2] - '0';
+			res += ptr[l2 + l1 + 1] + (f_digit * s_digit);
+			ptr[l1 + l2 + 1] = res % 10;
+			res /= 10;
+		}
+		if (res)
+			ptr[l1 + l2 + 1] = res % 10;
 	}
-	else if (new_size == old_size)
-		return (ptr);
-	p = malloc(new_size);
-	if (p == NULL)
-		return (NULL);
-	if (new_size > old_size)
-		n = old_size;
-	for (i = 0; i < n; i++)
-		p[i] = oldp[i];
-	free(ptr);
-	return (p);
+
+	while (*ptr == 0)
+	{
+		ptr++;
+		total_l--;
+	}
+
+	for (i = 0; i < total_l; i++)
+		printf("%i", ptr[i]);
+	printf("\n");
+	free(temp);
+}
+
+/**
+ * main - entry point
+ * Description: a program that multiplird two positive numbers
+ *
+ * @argc: number of arguments
+ * @argv: arguments array
+ *
+ * Return: 0 on succss 98 on failure
+ */
+
+int main(int argc, char *argv[])
+{
+	char *n1 = argv[1];
+	char *n2 = argv[2];
+
+	if (argc != 3 || check_number(n1) || check_number(n2))
+		error_exit();
+
+	if (*n1 == '0' || *n2 == '0')
+	{
+		_putchar('0');
+		_putchar('\n');
+	}
+	else
+		multiply(n1, n2);
+	return (0);
 }
