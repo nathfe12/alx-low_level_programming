@@ -25,4 +25,4 @@ char *_strdup(char *str)
 	copy[len] = '\0';
 
 	return (copy);
-}   
+}
